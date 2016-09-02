@@ -9,16 +9,17 @@ public class PriorityQueue
 
 	public void insert(int data)
 	{
-		size++;
 		queue[size] = data;
-
 		siftup(queue, size);
+
+		size++;
 	}
 
 	public int extractMin()
 	{
-		int min = queue[1];
-		swap(queue, 1, size);
+		int min = queue[0];
+		swap(queue, 0, (size - 1));
+
 		size--;
 		siftDown(queue, size);
 
@@ -28,6 +29,19 @@ public class PriorityQueue
 	public boolean isEmpty()
 	{
 		return size == 0;
+	}
+
+	public void print()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("[ ");
+		for (int i = 0; i < size; i++)
+		{
+			sb.append(queue[i]);
+			sb.append(' ');
+		}
+		sb.append("]");
+		System.out.println(sb);
 	}
 
 	/**
@@ -41,7 +55,7 @@ public class PriorityQueue
 	public void siftup(int[] arr, int index)
 	{
 		int i = index;
-		while (i > 1)
+		while (i > 0)
 		{
 			int parent = getParent(i);
 			int parentEl = arr[parent];
@@ -67,11 +81,11 @@ public class PriorityQueue
 	 */
 	public void siftDown(int[] arr, int size)
 	{
-		int i = 1;
-		while (i <= size)
+		int i = 0;
+		while (i < size)
 		{
 			int left = getLeft(i);
-			if (left > size)
+			if (left >= size)
 			{
 				break;
 			}
@@ -81,7 +95,7 @@ public class PriorityQueue
 			int minIndex = left;
 
 			int right = getRight(i);
-			if (right <= size)
+			if (right < size)
 			{
 				int rightChild = arr[right];
 				if (rightChild < minChild)
@@ -104,17 +118,17 @@ public class PriorityQueue
 
 	public int getParent(int i)
 	{
-		return i / 2;
+		return (i - 1) / 2;
 	}
 
 	public int getLeft(int i)
 	{
-		return (2 * i);
+		return (2 * i) + 1;
 	}
 
 	public int getRight(int i)
 	{
-		return ((2 * i) + 1);
+		return ((2 * i) + 2);
 	}
 
 	public void swap(int[] arr, int index1, int index2)
