@@ -426,4 +426,36 @@ public class BSTTest
 
 		Assert.assertEquals(randomList, list);
 	}
+
+	@Test
+	public void testBstInorderTraversalNonRecursive()
+	{
+		int size = 1000;
+		List<Integer> randomList = new ArrayList<>(size);
+		for (int i = 0; i < size; i++)
+		{
+			randomList.add((int) (Math.random() * size));
+		}
+
+		BST<Integer> bstRandom = new BST<>();
+		for (int i = 0; i < size; i++)
+		{
+			bstRandom.insert(randomList.get(i));
+		}
+
+		Collections.sort(randomList);
+		final List<Integer> list = new ArrayList<>();
+		Visitor<Integer> visitor = new Visitor<Integer>()
+		{
+
+			@Override
+			public void visit(Node<Integer> node)
+			{
+				list.add(node.getData());
+			}
+		};
+		bstRandom.inorderTraversalNonRecursive(visitor);
+
+		Assert.assertEquals(randomList, list);
+	}
 }

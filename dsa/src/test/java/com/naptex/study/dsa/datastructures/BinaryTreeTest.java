@@ -44,6 +44,37 @@ public class BinaryTreeTest
 	}
 
 	@Test
+	public void testInorderTraversalIterative()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+		BinaryTree<Integer> tree = new BinaryTree<>();
+		tree.setRoot(root);
+
+		final List<Integer> list = new ArrayList<>();
+		Visitor<Integer> visitor = new Visitor<Integer>()
+		{
+
+			@Override
+			public void visit(Node<Integer> node)
+			{
+				list.add(node.getData());
+			}
+		};
+		tree.inorderTraversalNonRecursive(visitor);
+
+		List<Integer> expectedList = new ArrayList<>();
+		expectedList.add(20);
+		expectedList.add(40);
+		expectedList.add(60);
+
+		Assert.assertEquals(expectedList, list);
+	}
+
+	@Test
 	public void testLevelwisePrintingRoot() throws IOException
 	{
 		Node<String> root = new Node<>("ROOT_NODE");

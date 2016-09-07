@@ -3,6 +3,7 @@ package com.naptex.study.dsa.datastructures;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Queue;
 
 public class BinaryTree<T extends Comparable<T>>
@@ -41,6 +42,34 @@ public class BinaryTree<T extends Comparable<T>>
 		if (node.getRight() != null)
 		{
 			inorderTraversal(node.getRight(), visitor);
+		}
+	}
+
+	public void inorderTraversalNonRecursive(Visitor<T> visitor)
+	{
+		Node<T> root = getRoot();
+		if (root == null)
+		{
+			return;
+		}
+
+		Deque<Node<T>> stack = new ArrayDeque<>();
+
+		Node<T> node = root;
+		while ((stack.isEmpty() == false) || (node != null))
+		{
+			while (node != null)
+			{
+				stack.addFirst(node);
+				node = node.getLeft();
+			}
+
+			if (stack.isEmpty() == false)
+			{
+				node = stack.removeFirst();
+				visitor.visit(node);
+				node = node.getRight();
+			}
 		}
 	}
 
