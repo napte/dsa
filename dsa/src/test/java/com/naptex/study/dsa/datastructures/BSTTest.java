@@ -1,5 +1,9 @@
 package com.naptex.study.dsa.datastructures;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -181,5 +185,211 @@ public class BSTTest
 		Node<Integer> expectedNullRightRight = bst.searchAtNode(root,
 				new Integer(9999));
 		Assert.assertNull(expectedNullRightRight);
+	}
+
+	@Test
+	public void testMinRoot()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Integer min = bst.getMinNode(root);
+		Integer expectedMin = new Integer(40);
+
+		Assert.assertEquals(expectedMin, min);
+	}
+
+	@Test
+	public void testMinOneLevel()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+		Integer min = bst.getMinNode(root);
+		Integer expectedMin = new Integer(20);
+
+		Assert.assertEquals(expectedMin, min);
+	}
+
+	@Test
+	public void testMinTwoLevelsLeftLeft()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+		Node<Integer> leftLeft = new Node<Integer>(10);
+		left.setLeft(leftLeft);
+		Integer min = bst.getMinNode(root);
+		Integer expectedMin = new Integer(10);
+
+		Assert.assertEquals(expectedMin, min);
+	}
+
+	@Test
+	public void testMinTwoLevelsLeftRight()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+		Node<Integer> leftRight = new Node<Integer>(30);
+		left.setRight(leftRight);
+		Integer min = bst.getMinNode(root);
+		Integer expectedMin = new Integer(20);
+
+		Assert.assertEquals(expectedMin, min);
+	}
+
+	@Test
+	public void testMaxRoot()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Integer max = bst.getMaxNode(root);
+		Integer expectedMax = new Integer(40);
+
+		Assert.assertEquals(expectedMax, max);
+	}
+
+	@Test
+	public void testMaxOneLevel()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+		Integer max = bst.getMaxNode(root);
+		Integer expectedMax = new Integer(60);
+
+		Assert.assertEquals(expectedMax, max);
+	}
+
+	@Test
+	public void testMaxTwoLevelsRightRight()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+		Node<Integer> rightRight = new Node<Integer>(80);
+		right.setRight(rightRight);
+		Integer max = bst.getMaxNode(root);
+		Integer expectedMax = new Integer(80);
+
+		Assert.assertEquals(expectedMax, max);
+	}
+
+	@Test
+	public void testMaxTwoLevelsRightLeft()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+		Node<Integer> rightLeft = new Node<Integer>(50);
+		left.setRight(rightLeft);
+		Integer max = bst.getMaxNode(root);
+		Integer expectedMax = new Integer(60);
+
+		Assert.assertEquals(expectedMax, max);
+	}
+
+	@Test
+	public void testMinRandom()
+	{
+		int size = 100;
+		List<Integer> list = new ArrayList<>(size);
+		for (int i = 0; i < size; i++)
+		{
+			list.add((int) (Math.random() * size));
+		}
+
+		BST<Integer> bstRandom = new BST<>();
+		for (int i = 0; i < size; i++)
+		{
+			bstRandom.insert(list.get(i));
+		}
+
+		Collections.sort(list);
+		Assert.assertEquals(list.get(0), bstRandom.getMin());
+	}
+
+	@Test
+	public void testMaxRandom()
+	{
+		int size = 100;
+		List<Integer> list = new ArrayList<>(size);
+		for (int i = 0; i < size; i++)
+		{
+			list.add((int) (Math.random() * size));
+		}
+
+		BST<Integer> bstRandom = new BST<>();
+		for (int i = 0; i < size; i++)
+		{
+			bstRandom.insert(list.get(i));
+		}
+
+		Collections.sort(list);
+		Assert.assertEquals(list.get(list.size() - 1), bstRandom.getMax());
+	}
+
+	@Test
+	public void testFloorNull()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+
+		Integer floor = bst.getFloor(left);
+		Assert.assertNull(floor);
+	}
+
+	@Test
+	public void testCeilNull()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+
+		Integer ceil = bst.getCeil(right);
+		Assert.assertNull(ceil);
+	}
+
+	@Test
+	public void testFloor()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+
+		Integer floor = bst.getFloor(root);
+		Integer expectedFloor = 20;
+		Assert.assertEquals(expectedFloor, floor);
+	}
+
+	@Test
+	public void testCeil()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+
+		Integer ceil = bst.getCeil(root);
+		Integer expectedCeil = 60;
+		Assert.assertEquals(expectedCeil, ceil);
 	}
 }
