@@ -2,12 +2,47 @@ package com.naptex.study.dsa.datastructures;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.naptex.study.dsa.datastructures.BinaryTree.Visitor;
+
 public class BinaryTreeTest
 {
+	@Test
+	public void testInorderTraversal()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+		BinaryTree<Integer> tree = new BinaryTree<>();
+		tree.setRoot(root);
+
+		final List<Integer> list = new ArrayList<>();
+		Visitor<Integer> visitor = new Visitor<Integer>()
+		{
+
+			@Override
+			public void visit(Node<Integer> node)
+			{
+				list.add(node.getData());
+			}
+		};
+		tree.inorderTraversal(visitor);
+
+		List<Integer> expectedList = new ArrayList<>();
+		expectedList.add(20);
+		expectedList.add(40);
+		expectedList.add(60);
+
+		Assert.assertEquals(expectedList, list);
+	}
+
 	@Test
 	public void testLevelwisePrintingRoot() throws IOException
 	{

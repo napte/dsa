@@ -7,6 +7,11 @@ import java.util.Queue;
 
 public class BinaryTree<T extends Comparable<T>>
 {
+	public interface Visitor<T>
+	{
+		public void visit(Node<T> node);
+	}
+
 	private Node<T> root;
 
 	public Node<T> getRoot()
@@ -17,6 +22,26 @@ public class BinaryTree<T extends Comparable<T>>
 	public void setRoot(Node<T> root)
 	{
 		this.root = root;
+	}
+
+	public void inorderTraversal(Visitor<T> visitor)
+	{
+		inorderTraversal(getRoot(), visitor);
+	}
+
+	public void inorderTraversal(Node<T> node, Visitor<T> visitor)
+	{
+		if (node.getLeft() != null)
+		{
+			inorderTraversal(node.getLeft(), visitor);
+		}
+
+		visitor.visit(node);
+
+		if (node.getRight() != null)
+		{
+			inorderTraversal(node.getRight(), visitor);
+		}
 	}
 
 	public void getLevelwisePrint(Writer out) throws IOException

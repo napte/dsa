@@ -7,6 +7,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.naptex.study.dsa.datastructures.BinaryTree.Visitor;
+
 public class BSTTest
 {
 	private final BST<Integer> bst = new BST<>();
@@ -391,5 +393,37 @@ public class BSTTest
 		Integer ceil = bst.getCeil(root);
 		Integer expectedCeil = 60;
 		Assert.assertEquals(expectedCeil, ceil);
+	}
+
+	@Test
+	public void testBstInorderTraversal()
+	{
+		int size = 1000;
+		List<Integer> randomList = new ArrayList<>(size);
+		for (int i = 0; i < size; i++)
+		{
+			randomList.add((int) (Math.random() * size));
+		}
+
+		BST<Integer> bstRandom = new BST<>();
+		for (int i = 0; i < size; i++)
+		{
+			bstRandom.insert(randomList.get(i));
+		}
+
+		Collections.sort(randomList);
+		final List<Integer> list = new ArrayList<>();
+		Visitor<Integer> visitor = new Visitor<Integer>()
+		{
+
+			@Override
+			public void visit(Node<Integer> node)
+			{
+				list.add(node.getData());
+			}
+		};
+		bstRandom.inorderTraversal(visitor);
+
+		Assert.assertEquals(randomList, list);
 	}
 }
