@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.naptex.study.dsa.datastructures.BinaryTree.Visitor;
 
-public class BSTTest
+public class BSTTest extends BinaryTreeTest
 {
 	private final BST<Integer> bst = new BST<>();
 
@@ -24,6 +24,7 @@ public class BSTTest
 		Assert.assertNotNull(node.getLeft());
 		Node<Integer> left = node.getLeft();
 		Assert.assertEquals(expectedLeft, left);
+		Assert.assertEquals(left.getParent(), node);
 	}
 
 	@Test
@@ -37,6 +38,7 @@ public class BSTTest
 		Assert.assertNotNull(node.getRight());
 		Node<Integer> right = node.getRight();
 		Assert.assertEquals(expectedRight, right);
+		Assert.assertEquals(right.getParent(), node);
 	}
 
 	@Test
@@ -57,6 +59,7 @@ public class BSTTest
 		Assert.assertNotNull(left.getLeft());
 		Node<Integer> leftOfLeft = left.getLeft();
 		Assert.assertEquals(expectedLeftOfLeft, leftOfLeft);
+		Assert.assertEquals(leftOfLeft.getParent(), left);
 	}
 
 	@Test
@@ -77,6 +80,7 @@ public class BSTTest
 		Assert.assertNotNull(left.getRight());
 		Node<Integer> rightOfLeft = left.getRight();
 		Assert.assertEquals(expectedRightOfLeft, rightOfLeft);
+		Assert.assertEquals(rightOfLeft.getParent(), left);
 	}
 
 	@Test
@@ -97,6 +101,7 @@ public class BSTTest
 		Assert.assertNotNull(right.getLeft());
 		Node<Integer> leftOfRight = right.getLeft();
 		Assert.assertEquals(expectedLeftOfRight, leftOfRight);
+		Assert.assertEquals(leftOfRight.getParent(), right);
 	}
 
 	@Test
@@ -117,6 +122,253 @@ public class BSTTest
 		Assert.assertNotNull(right.getRight());
 		Node<Integer> rightOfRight = right.getRight();
 		Assert.assertEquals(expectedRightOfRight, rightOfRight);
+		Assert.assertEquals(rightOfRight.getParent(), right);
+	}
+
+	@Test
+	public void testTransplantRootLeft()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+		BST<Integer> tree = new BST<>();
+		tree.setRoot(root);
+
+		tree.transplant(root, left);
+		Node<Integer> expectedRoot = left;
+		Assert.assertEquals(expectedRoot, tree.getRoot());
+	}
+
+	@Test
+	public void testTransplantRootRight()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		Node<Integer> right = new Node<Integer>(60);
+		root.setLeft(left);
+		root.setRight(right);
+		BST<Integer> tree = new BST<>();
+		tree.setRoot(root);
+
+		tree.transplant(root, right);
+		Node<Integer> expectedRoot = right;
+		Assert.assertEquals(expectedRoot, tree.getRoot());
+	}
+
+	@Test
+	public void testTransplantLeftLeft()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		left.setParent(root);
+		Node<Integer> right = new Node<Integer>(60);
+		right.setParent(root);
+		root.setLeft(left);
+		root.setRight(right);
+
+		Node<Integer> leftLeft = new Node<Integer>(10);
+		left.setLeft(leftLeft);
+		BST<Integer> tree = new BST<>();
+		tree.setRoot(root);
+
+		tree.transplant(left, leftLeft);
+		Assert.assertEquals(leftLeft.getParent(), root);
+		Assert.assertEquals(leftLeft, root.getLeft());
+	}
+
+	@Test
+	public void testTransplantLeftRight()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		left.setParent(root);
+		Node<Integer> right = new Node<Integer>(60);
+		right.setParent(root);
+		root.setLeft(left);
+		root.setRight(right);
+
+		Node<Integer> leftRight = new Node<Integer>(30);
+		left.setRight(leftRight);
+		BST<Integer> tree = new BST<>();
+		tree.setRoot(root);
+
+		tree.transplant(left, leftRight);
+		Assert.assertEquals(leftRight.getParent(), root);
+		Assert.assertEquals(leftRight, root.getLeft());
+	}
+
+	@Test
+	public void testTransplantRightLeft()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		left.setParent(root);
+		Node<Integer> right = new Node<Integer>(60);
+		right.setParent(root);
+		root.setLeft(left);
+		root.setRight(right);
+
+		Node<Integer> rightLeft = new Node<Integer>(50);
+		left.setLeft(rightLeft);
+		BST<Integer> tree = new BST<>();
+		tree.setRoot(root);
+
+		tree.transplant(right, rightLeft);
+		Assert.assertEquals(rightLeft.getParent(), root);
+		Assert.assertEquals(rightLeft, root.getRight());
+	}
+
+	@Test
+	public void testTransplantRightRight()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		left.setParent(root);
+		Node<Integer> right = new Node<Integer>(60);
+		right.setParent(root);
+		root.setLeft(left);
+		root.setRight(right);
+
+		Node<Integer> rightRight = new Node<Integer>(70);
+		left.setRight(rightRight);
+		BST<Integer> tree = new BST<>();
+		tree.setRoot(root);
+
+		tree.transplant(right, rightRight);
+		Assert.assertEquals(rightRight.getParent(), root);
+		Assert.assertEquals(rightRight, root.getRight());
+	}
+
+	@Test
+	public void testDeleteWithOnlyLeftChild()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		left.setParent(root);
+		root.setLeft(left);
+		Node<Integer> leftLeft = new Node<Integer>(10);
+		leftLeft.setParent(left);
+		left.setLeft(leftLeft);
+		BST<Integer> tree = new BST<>();
+		tree.setRoot(root);
+
+		tree.deleteNode(left);
+		Assert.assertEquals(root, leftLeft.getParent());
+		Assert.assertEquals(leftLeft, root.getLeft());
+	}
+
+	@Test
+	public void testDeleteWithOnlyRightChild()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		left.setParent(root);
+		root.setLeft(left);
+		Node<Integer> leftRight = new Node<Integer>(30);
+		leftRight.setParent(left);
+		left.setRight(leftRight);
+		BST<Integer> tree = new BST<>();
+		tree.setRoot(root);
+
+		tree.deleteNode(left);
+		Assert.assertEquals(root, leftRight.getParent());
+		Assert.assertEquals(leftRight, root.getLeft());
+	}
+
+	@Test
+	public void testDeleteRootWithSuccessorRightChild()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		left.setParent(root);
+		root.setLeft(left);
+		Node<Integer> right = new Node<Integer>(50);
+		right.setParent(root);
+		root.setLeft(left);
+		root.setRight(right);
+		Node<Integer> rightRight = new Node<Integer>(60);
+		right.setRight(rightRight);
+		rightRight.setParent(right);
+		BST<Integer> tree = new BST<>();
+		tree.setRoot(root);
+
+		tree.deleteNode(root);
+		Assert.assertEquals(left, right.getLeft());
+		Assert.assertEquals(left.getParent(), right);
+		Assert.assertEquals(rightRight, right.getRight());
+		Assert.assertEquals(right, rightRight.getParent());
+		Assert.assertEquals(right, tree.getRoot());
+	}
+
+	@Test
+	public void testDeleteRootWithSuccessorNotRightChild()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		left.setParent(root);
+		root.setLeft(left);
+		Node<Integer> right = new Node<Integer>(60);
+		right.setParent(root);
+		root.setLeft(left);
+		root.setRight(right);
+
+		Node<Integer> rightLeft = new Node<Integer>(50);
+		right.setLeft(rightLeft);
+		rightLeft.setParent(right);
+		Node<Integer> rightLeftRight = new Node<Integer>(55);
+		rightLeft.setRight(rightLeftRight);
+		rightLeftRight.setParent(rightLeft);
+		Node<Integer> rightRight = new Node<Integer>(70);
+		right.setRight(rightRight);
+		rightRight.setParent(right);
+		BST<Integer> tree = new BST<>();
+		tree.setRoot(root);
+
+		tree.deleteNode(root);
+
+		Assert.assertEquals(left, rightLeft.getLeft());
+		Assert.assertEquals(left.getParent(), rightLeft);
+		Assert.assertEquals(right, rightLeft.getRight());
+		Assert.assertEquals(right.getParent(), rightLeft);
+		Assert.assertEquals(rightRight, right.getRight());
+		Assert.assertEquals(right, rightRight.getParent());
+		Assert.assertEquals(rightLeftRight, right.getLeft());
+		Assert.assertEquals(right, rightLeftRight.getParent());
+		Assert.assertEquals(rightLeft, tree.getRoot());
+	}
+
+	@Test
+	public void testDeleteWithSuccessorRightChild()
+	{
+		Node<Integer> root = new Node<Integer>(40);
+		Node<Integer> left = new Node<Integer>(20);
+		left.setParent(root);
+		root.setLeft(left);
+		Node<Integer> right = new Node<Integer>(60);
+		right.setParent(root);
+		root.setLeft(left);
+		root.setRight(right);
+
+		Node<Integer> rightLeft = new Node<Integer>(50);
+		right.setLeft(rightLeft);
+		rightLeft.setParent(right);
+		Node<Integer> rightLeftRight = new Node<Integer>(55);
+		rightLeft.setRight(rightLeftRight);
+		rightLeftRight.setParent(rightLeft);
+		Node<Integer> rightRight = new Node<Integer>(70);
+		right.setRight(rightRight);
+		rightRight.setParent(right);
+		BST<Integer> tree = new BST<>();
+		tree.setRoot(root);
+
+		tree.deleteNode(right);
+
+		Assert.assertEquals(root, rightRight.getParent());
+		Assert.assertEquals(root.getRight(), rightRight);
+		Assert.assertEquals(rightLeft, rightRight.getLeft());
+		Assert.assertEquals(rightRight, rightLeft.getParent());
 	}
 
 	@Test
@@ -189,11 +441,18 @@ public class BSTTest
 		Assert.assertNull(expectedNullRightRight);
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testMinEmptyTree()
+	{
+		BST<Integer> emptyTree = new BST<>();
+		emptyTree.getMin();
+	}
+
 	@Test
 	public void testMinRoot()
 	{
 		Node<Integer> root = new Node<Integer>(40);
-		Integer min = bst.getMinNode(root);
+		Integer min = bst.getMinNode(root).getData();
 		Integer expectedMin = new Integer(40);
 
 		Assert.assertEquals(expectedMin, min);
@@ -207,7 +466,7 @@ public class BSTTest
 		Node<Integer> right = new Node<Integer>(60);
 		root.setLeft(left);
 		root.setRight(right);
-		Integer min = bst.getMinNode(root);
+		Integer min = bst.getMinNode(root).getData();
 		Integer expectedMin = new Integer(20);
 
 		Assert.assertEquals(expectedMin, min);
@@ -223,7 +482,7 @@ public class BSTTest
 		root.setRight(right);
 		Node<Integer> leftLeft = new Node<Integer>(10);
 		left.setLeft(leftLeft);
-		Integer min = bst.getMinNode(root);
+		Integer min = bst.getMinNode(root).getData();
 		Integer expectedMin = new Integer(10);
 
 		Assert.assertEquals(expectedMin, min);
@@ -239,17 +498,24 @@ public class BSTTest
 		root.setRight(right);
 		Node<Integer> leftRight = new Node<Integer>(30);
 		left.setRight(leftRight);
-		Integer min = bst.getMinNode(root);
+		Integer min = bst.getMinNode(root).getData();
 		Integer expectedMin = new Integer(20);
 
 		Assert.assertEquals(expectedMin, min);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testMaxEmptyTree()
+	{
+		BST<Integer> emptyTree = new BST<>();
+		emptyTree.getMax();
 	}
 
 	@Test
 	public void testMaxRoot()
 	{
 		Node<Integer> root = new Node<Integer>(40);
-		Integer max = bst.getMaxNode(root);
+		Integer max = bst.getMaxNode(root).getData();
 		Integer expectedMax = new Integer(40);
 
 		Assert.assertEquals(expectedMax, max);
@@ -263,7 +529,7 @@ public class BSTTest
 		Node<Integer> right = new Node<Integer>(60);
 		root.setLeft(left);
 		root.setRight(right);
-		Integer max = bst.getMaxNode(root);
+		Integer max = bst.getMaxNode(root).getData();
 		Integer expectedMax = new Integer(60);
 
 		Assert.assertEquals(expectedMax, max);
@@ -279,7 +545,7 @@ public class BSTTest
 		root.setRight(right);
 		Node<Integer> rightRight = new Node<Integer>(80);
 		right.setRight(rightRight);
-		Integer max = bst.getMaxNode(root);
+		Integer max = bst.getMaxNode(root).getData();
 		Integer expectedMax = new Integer(80);
 
 		Assert.assertEquals(expectedMax, max);
@@ -295,7 +561,7 @@ public class BSTTest
 		root.setRight(right);
 		Node<Integer> rightLeft = new Node<Integer>(50);
 		left.setRight(rightLeft);
-		Integer max = bst.getMaxNode(root);
+		Integer max = bst.getMaxNode(root).getData();
 		Integer expectedMax = new Integer(60);
 
 		Assert.assertEquals(expectedMax, max);

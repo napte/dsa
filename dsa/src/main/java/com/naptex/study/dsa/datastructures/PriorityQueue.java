@@ -31,19 +31,6 @@ public class PriorityQueue
 		return size == 0;
 	}
 
-	public void print()
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append("[ ");
-		for (int i = 0; i < size; i++)
-		{
-			sb.append(queue[i]);
-			sb.append(' ');
-		}
-		sb.append("]");
-		System.out.println(sb);
-	}
-
 	/**
 	 * Sifts up the element arr[index] to its appropriate position in the heap
 	 * 

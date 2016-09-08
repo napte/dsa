@@ -5,6 +5,7 @@ public class Node<T>
 	private T data;
 	private Node<T> left;
 	private Node<T> right;
+	private Node<T> parent;
 
 	public Node(T data)
 	{
@@ -36,13 +37,14 @@ public class Node<T>
 		this.right = right;
 	}
 
-	@Override
-	public int hashCode()
+	public Node<T> getParent()
 	{
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((data == null) ? 0 : data.hashCode());
-		return result;
+		return parent;
+	}
+
+	public void setParent(Node<T> parent)
+	{
+		this.parent = parent;
 	}
 
 	@Override
@@ -70,4 +72,5 @@ public class Node<T>
 	{
 		return "Node [data=" + data + "]";
 	}
+
 }

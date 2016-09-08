@@ -112,6 +112,14 @@ public class PriorityQueueTest
 	}
 
 	@Test
+	public void testIsNotEmpty()
+	{
+		PriorityQueue pq = new PriorityQueue();
+		pq.insert(10);
+		Assert.assertFalse(pq.isEmpty());
+	}
+
+	@Test
 	public void testFunctioning()
 	{
 		PriorityQueue pq = new PriorityQueue();

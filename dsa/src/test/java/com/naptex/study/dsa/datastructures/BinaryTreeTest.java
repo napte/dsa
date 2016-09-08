@@ -75,6 +75,16 @@ public class BinaryTreeTest
 	}
 
 	@Test
+	public void testLevelwisePrintingEmptyTree() throws IOException
+	{
+		StringWriter out = new StringWriter();
+		BinaryTree<String> tree = new BinaryTree<>();
+		tree.getLevelwisePrint(out);
+		String expected = "";
+		Assert.assertEquals(expected, out.toString());
+	}
+
+	@Test
 	public void testLevelwisePrintingRoot() throws IOException
 	{
 		Node<String> root = new Node<>("ROOT_NODE");

@@ -49,6 +49,7 @@ public class BST<T extends Comparable<T>> extends BinaryTree<T>
 			{
 				left = new Node<T>(item);
 				node.setLeft(left);
+				left.setParent(node);
 			}
 			else
 			{
@@ -62,11 +63,73 @@ public class BST<T extends Comparable<T>> extends BinaryTree<T>
 			{
 				right = new Node<T>(item);
 				node.setRight(right);
+				right.setParent(node);
 			}
 			else
 			{
 				insertAtNode(right, item);
 			}
+		}
+	}
+
+	/**
+	 * Replaces the specified old node with the specified new node
+	 * 
+	 * @param oldNode
+	 *            node to be replaced
+	 * @param newNode
+	 *            node to replace the old node with
+	 */
+	public void transplant(Node<T> oldNode, Node<T> newNode)
+	{
+		Node<T> parentNode = oldNode.getParent();
+		if (parentNode == null)
+		{
+			// root node
+			setRoot(newNode);
+		}
+		else
+		{
+			if (parentNode.getLeft() == oldNode)
+			{
+				parentNode.setLeft(newNode);
+			}
+			else
+			{
+				parentNode.setRight(newNode);
+			}
+		}
+		if (newNode != null)
+		{
+			newNode.setParent(parentNode);
+		}
+	}
+
+	public void deleteNode(Node<T> node)
+	{
+		if (node.getLeft() == null)
+		{
+			transplant(node, node.getRight());
+		}
+		else if (node.getRight() == null)
+		{
+			transplant(node, node.getLeft());
+		}
+		else
+		{
+			Node<T> successor = getMinNode(node.getRight());
+			if (successor.getParent() != node)
+			{
+				Node<T> right = successor.getRight();
+				transplant(successor, right);
+				successor.setRight(node.getRight());
+				successor.getRight().setParent(successor);
+			}
+
+			transplant(node, successor);
+			Node<T> left = node.getLeft();
+			successor.setLeft(left);
+			left.setParent(successor);
 		}
 	}
 
@@ -77,17 +140,17 @@ public class BST<T extends Comparable<T>> extends BinaryTree<T>
 			throw new IllegalArgumentException("Tree is empty");
 		}
 
-		return getMinNode(getRoot());
+		return getMinNode(getRoot()).getData();
 	}
 
-	public T getMinNode(Node<T> node)
+	public Node<T> getMinNode(Node<T> node)
 	{
 		while (node.getLeft() != null)
 		{
 			node = node.getLeft();
 		}
 
-		return node.getData();
+		return node;
 	}
 
 	public T getMax()
@@ -97,17 +160,17 @@ public class BST<T extends Comparable<T>> extends BinaryTree<T>
 			throw new IllegalArgumentException("Tree is empty");
 		}
 
-		return getMaxNode(getRoot());
+		return getMaxNode(getRoot()).getData();
 	}
 
-	public T getMaxNode(Node<T> node)
+	public Node<T> getMaxNode(Node<T> node)
 	{
 		while (node.getRight() != null)
 		{
 			node = node.getRight();
 		}
 
-		return node.getData();
+		return node;
 	}
 
 	public T getFloor(Node<T> node)
@@ -117,7 +180,7 @@ public class BST<T extends Comparable<T>> extends BinaryTree<T>
 			return null;
 		}
 
-		return getMaxNode(node.getLeft());
+		return getMaxNode(node.getLeft()).getData();
 	}
 
 	public T getCeil(Node<T> node)
@@ -127,6 +190,6 @@ public class BST<T extends Comparable<T>> extends BinaryTree<T>
 			return null;
 		}
 
-		return getMinNode(node.getRight());
+		return getMinNode(node.getRight()).getData();
 	}
 }
