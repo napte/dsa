@@ -163,4 +163,33 @@ public class PriorityQueueTest
 
 		Assert.assertArrayEquals(arr, arr2);
 	}
+
+	@Test
+	public void testDecreaseKey()
+	{
+		PriorityQueue pq = new PriorityQueue();
+		for (int i = 0; i < 32; i++)
+		{
+			pq.insert((101 + (int) (Math.random() * 100)));
+		}
+
+		for (int i = 0; i < 32; i++)
+		{
+			if (i % 5 == 0)
+			{
+				pq.decreaseKey(i, (int) (Math.random() * 100));
+			}
+		}
+
+		int[] arr = new int[32];
+		for (int i = 0; i < 32; i++)
+		{
+			arr[i] = pq.extractMin();
+		}
+
+		int[] arr2 = arr.clone();
+		Arrays.sort(arr2);
+
+		Assert.assertArrayEquals(arr, arr2);
+	}
 }

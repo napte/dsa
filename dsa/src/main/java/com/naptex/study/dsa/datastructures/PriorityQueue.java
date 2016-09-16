@@ -103,6 +103,17 @@ public class PriorityQueue
 		}
 	}
 
+	public void decreaseKey(int index, int newValue)
+	{
+		decreaseKey(queue, index, newValue);
+	}
+
+	public void decreaseKey(int[] arr, int index, int newValue)
+	{
+		arr[index] = newValue;
+		siftup(arr, index);
+	}
+
 	public int getParent(int i)
 	{
 		return (i - 1) / 2;
