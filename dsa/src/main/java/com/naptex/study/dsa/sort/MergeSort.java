@@ -17,7 +17,7 @@ public class MergeSort
 	{
 		if ((high - low) < INSERTIONSORT_THRESHOLD)
 		{
-			insertionSort(arr);
+			insertionSort(arr, low, high);
 			return;
 		}
 
@@ -68,9 +68,9 @@ public class MergeSort
 		}
 	}
 
-	public void insertionSort(int[] arr)
+	public void insertionSort(int[] arr, int low, int high)
 	{
-		for (int i = 1; i < arr.length; i++)
+		for (int i = low; i <= high; i++)
 		{
 			int j = i;
 			while (j > 0 && (arr[j] < arr[j - 1]))

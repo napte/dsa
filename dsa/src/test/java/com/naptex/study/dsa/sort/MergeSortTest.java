@@ -12,7 +12,7 @@ public class MergeSortTest
 	{
 		int[] arr = new int[] { 4, 2, 5, 1, 0, 9, 123 };
 		MergeSort sorter = new MergeSort();
-		sorter.insertionSort(arr);
+		sorter.insertionSort(arr, 0, arr.length - 1);
 		int[] sortedArr = new int[] { 0, 1, 2, 4, 5, 9, 123 };
 		Assert.assertTrue(Arrays.equals(arr, sortedArr));
 	}
@@ -23,7 +23,7 @@ public class MergeSortTest
 		int[] arr = new int[] { -12, -12, -12, 4, 4, 4, 2, 5, 1, 0, 0, 9, 123,
 				-10, -10 };
 		MergeSort sorter = new MergeSort();
-		sorter.insertionSort(arr);
+		sorter.insertionSort(arr, 0, arr.length - 1);
 		int[] sortedArr = new int[] { -12, -12, -12, -10, -10, 0, 0, 1, 2, 4, 4,
 				4, 5, 9, 123 };
 		Assert.assertTrue(Arrays.equals(arr, sortedArr));
@@ -35,7 +35,7 @@ public class MergeSortTest
 		int[] arr = new int[] { 100, 50, 10, 5, 4, 3, 2, 1, 0, -1, -2, -50,
 				-100 };
 		MergeSort sorter = new MergeSort();
-		sorter.insertionSort(arr);
+		sorter.insertionSort(arr, 0, arr.length - 1);
 		int[] sortedArr = new int[] { -100, -50, -2, -1, 0, 1, 2, 3, 4, 5, 10,
 				50, 100 };
 		Assert.assertTrue(Arrays.equals(arr, sortedArr));
@@ -47,7 +47,7 @@ public class MergeSortTest
 		int[] arr = new int[] { -100, -50, -2, -1, 0, 1, 2, 3, 4, 5, 10, 50,
 				100 };
 		MergeSort sorter = new MergeSort();
-		sorter.insertionSort(arr);
+		sorter.insertionSort(arr, 0, arr.length - 1);
 		int[] sortedArr = new int[] { -100, -50, -2, -1, 0, 1, 2, 3, 4, 5, 10,
 				50, 100 };
 		Assert.assertTrue(Arrays.equals(arr, sortedArr));
