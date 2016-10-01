@@ -5,34 +5,36 @@ import java.util.Map;
 
 public class LRUCache<K, V>
 {
-	private static class ListNode<V>
+	private static class ListNode<K, V>
 	{
+		private final K key;
 		private V data;
-		private ListNode<V> next;
-		private ListNode<V> prev;
+		private ListNode<K, V> next;
+		private ListNode<K, V> prev;
 
-		public ListNode(V data)
+		public ListNode(K key, V data)
 		{
 			super();
+			this.key = key;
 			this.data = data;
 		}
 
-		public ListNode<V> getNext()
+		public ListNode<K, V> getNext()
 		{
 			return next;
 		}
 
-		public void setNext(ListNode<V> next)
+		public void setNext(ListNode<K, V> next)
 		{
 			this.next = next;
 		}
 
-		public ListNode<V> getPrev()
+		public ListNode<K, V> getPrev()
 		{
 			return prev;
 		}
 
-		public void setPrev(ListNode<V> prev)
+		public void setPrev(ListNode<K, V> prev)
 		{
 			this.prev = prev;
 		}
@@ -46,12 +48,16 @@ public class LRUCache<K, V>
 		{
 			this.data = data;
 		}
+
+		public K getKey()
+		{
+			return key;
+		}
 	}
 
-	private Map<K, ListNode<V>> map;
-	private ListNode<V> head;
-	private K tailKey;
-	private ListNode<V> tailValue;
+	private Map<K, ListNode<K, V>> map;
+	private ListNode<K, V> head;
+	private ListNode<K, V> tail;
 	int size = 0;
 	private final int capacity;
 
@@ -65,7 +71,7 @@ public class LRUCache<K, V>
 	{
 		if (map.containsKey(key))
 		{
-			ListNode<V> node = map.get(key);
+			ListNode<K, V> node = map.get(key);
 			bringAtHead(node);
 			V result = node.getData();
 			return result;
@@ -81,14 +87,14 @@ public class LRUCache<K, V>
 		if (map.containsKey(key))
 		{
 			// just bring the value to front
-			ListNode<V> node = map.get(key);
+			ListNode<K, V> node = map.get(key);
 			node.setData(value);
 			bringAtHead(node);
 		}
 		else
 		{
 			size++;
-			ListNode<V> node = new ListNode<>(value);
+			ListNode<K, V> node = new ListNode<>(key, value);
 			map.put(key, node);
 			if (size > capacity)
 			{
@@ -100,7 +106,7 @@ public class LRUCache<K, V>
 
 	public void printLRUOrder()
 	{
-		ListNode<V> node = head;
+		ListNode<K, V> node = head;
 		System.out.print("[");
 		while (node != null)
 		{
@@ -111,15 +117,15 @@ public class LRUCache<K, V>
 		System.out.println("]");
 	}
 
-	private void bringAtHead(ListNode<V> node)
+	private void bringAtHead(ListNode<K, V> node)
 	{
 		if (node == head)
 		{
 			return;
 		}
 
-		ListNode<V> prev = node.getPrev();
-		ListNode<V> next = node.getNext();
+		ListNode<K, V> prev = node.getPrev();
+		ListNode<K, V> next = node.getNext();
 		if (prev != null)
 		{
 			prev.setNext(next);
@@ -133,35 +139,41 @@ public class LRUCache<K, V>
 		head.setPrev(node);
 		node.setPrev(null);
 		head = node;
+
+		if (tail == node)
+		{
+			tail = prev;
+		}
 	}
 
 	private void removeTail()
 	{
-		ListNode<V> prev = tailValue.getPrev();
+		map.remove(tail.getKey());
+		size--;
+
+		ListNode<K, V> prev = tail.getPrev();
 		if (prev == null)
 		{
 			// list is now empty
 			head = null;
-			tailValue = null;
+			tail = null;
 			return;
 		}
 		else
 		{
 			prev.setNext(null);
-			tailValue = prev;
+			tail = prev;
 		}
-		map.remove(tailKey);
 	}
 
-	private void insertAtHead(K key, ListNode<V> node)
+	private void insertAtHead(K key, ListNode<K, V> node)
 	{
 		if (head == null)
 		{
 			node.setNext(null);
 			node.setPrev(null);
 			head = node;
-			tailKey = key;
-			tailValue = node;
+			tail = node;
 		}
 		else
 		{
@@ -170,23 +182,5 @@ public class LRUCache<K, V>
 			head.setPrev(node);
 			head = node;
 		}
-	}
-
-	public static void main(String[] args)
-	{
-		LRUCache<Integer, String> cache = new LRUCache<>(4);
-		cache.set(1, "AA");
-		cache.set(2, "BB");
-		System.out.println(cache.get(2));
-		System.out.println(cache.get(3));
-		cache.set(3, "CC");
-		System.out.println("After setting value for 3 " + cache.get(3));
-		cache.set(4, "DD");
-		cache.printLRUOrder();
-		cache.get(1);
-		cache.printLRUOrder();
-		cache.set(5, "EE");
-		cache.set(1, "aaa");
-		System.out.println("After updating value of 1 " + cache.get(1));
 	}
 }
